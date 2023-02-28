@@ -23,14 +23,14 @@ def load_data():
 
 @click.command('create-db')
 def create_db_task():
-    """Clear the existing data and create new tables"""
+    # Drop all tables and recreate the database
     create_db()
     click.echo('Created the database')
 
 
 @click.command('load-data')
 def load_data_task():
-    """Populate the database with default data"""
+    # Populate the database with default data
     load_data()
     click.echo('Populated the database')
 
