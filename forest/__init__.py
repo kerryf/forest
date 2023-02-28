@@ -1,57 +1,62 @@
-import os
 import json
 import logging
 import logging.config
+import os
 
 from flask import Flask
 
-from . import auth_bp
-from . import home_bp
-from . import forest_bp
-from . import db
-from . import guard
-from . import lumber
+from . import dart, db, lumber, guard
+from . import forest_bp, auth_bp, home_bp
 
 logger = logging.getLogger(__name__)
 
 
 def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    # Create and configure the app
+    app = Flask(__name__)
     app.config.from_mapping(
-        SECRET_KEY='c8a2d2ebfd7a97fedf84756e69347af354c8b2bcacb1a2bc8277c59688879c03',
         DATABASE=os.path.join(app.instance_path, 'forest.sqlite'),
     )
 
     if test_config is None:
-        # load the instance config, if it exists, when not testing
+        # Load the regular config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
     else:
-        # load the test config if passed in
+        # Load the test config if present
         app.config.from_mapping(test_config)
 
-    # create the log directory
-    log_path = os.path.join(app.instance_path, 'logs')
+    # Create the instance and log folders
+    log_folder = os.path.join(app.instance_path, 'logs')
     try:
-        os.makedirs(log_path)
+        os.makedirs(log_folder)
     except OSError:
         pass
 
-    # read logging configuration
-    log_config_file = os.path.join(app.instance_path, 'logging.json')
+    # Read the logging configuration
+    log_config_file = os.path.join(__name__, 'logging.json')
     with open(log_config_file) as f:
         log_config = json.load(f)
 
-    # set the logging file name
-    log_config['handlers']['file']['filename'] = os.path.join(log_path, 'forest.log')
+    # Define the log file name and set the logging configuration
+    log_config['handlers']['file']['filename'] = os.path.join(log_folder, 'forest.log')
     logging.config.dictConfig(log_config)
 
+    # Register the database
     db.register(app)
 
+    # Enable the command line tools
     lumber.register(app)
 
+    # Put the authenticated user, if present, into every request
     app.before_request(guard.load_person)
 
+    # Register our custom template functions
+    app.jinja_env.globals['csrf_token'] = guard.csrf_token
+    app.jinja_env.globals['has_role'] = guard.has_role
+    app.jinja_env.globals['dart_has'] = dart.dart_has
+    app.jinja_env.globals['dart_first'] = dart.dart_first
+
+    # Define all the routes
     app.register_blueprint(forest_bp.bp)
     app.register_blueprint(auth_bp.bp)
     app.register_blueprint(home_bp.bp)
