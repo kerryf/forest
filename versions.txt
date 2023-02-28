@@ -1,0 +1,4 @@
+Bootstrap 5.2.3
+Bootstrap Icons 1.10.3
+Bootswatch Sandstone 5.2.3
+Umbrella JS
