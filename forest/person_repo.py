@@ -21,13 +21,13 @@ def create_person(data: dict) -> int:
 
 def get_person(person_id: int) -> Optional[dict]:
     db = get_db()
-    person = db.execute('select * from person where id = ?', person_id).fetchone()
+    person = db.execute('select * from person where id = ?', (person_id,)).fetchone()
 
     return person
 
 
 def find_person(email: str) -> Optional[dict]:
     db = get_db()
-    person = db.execute('select * from person where email = ?', email).fetchone()
+    person = db.execute('select * from person where email = ?', (email,)).fetchone()
 
     return person
