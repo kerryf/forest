@@ -1,15 +1,37 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
-{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
-  </form>
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col-md-6 offset-md-3 my-4">
+                <h1>Login</h1>
+                {% if dart_has('login_error') %}
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        {{ dart_first('login_error') }}
+                    </div>
+                {% endif %}
+                <form action="/login" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" name="email" type="email" class="form-control{{ ' is-invalid' if dart_has('email') }}" maxlength="192" value="">
+                        {% if dart_has('email') %}
+                            <div class="invalid-feedback">{{ dart_first('email') }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input id="password" name="password" type="password" class="form-control{{ ' is-invalid' if dart_has('password') }}" maxlength="64" value="">
+                        {% if dart_has('password') %}
+                            <div class="invalid-feedback">{{ dart_first('password') }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
