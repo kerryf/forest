@@ -25,6 +25,19 @@ def csrf_token() -> Optional[str]:
     return None
 
 
+def check_csrf_token(form_token: str) -> None:
+
+    if 'csrf_token' in session.keys():
+        session_token = session['csrf_token']
+        valid = session_token == form_token
+        if not valid:
+            abort(403, 'invalid_token')
+    else:
+        abort(401)
+
+    return None
+
+
 def has_role(roles: list[str]) -> bool:
     person_id = session.get('forest_person')
 
@@ -74,7 +87,7 @@ def role_required(roles: list[str]):
 
             authorized = has_role(roles)
             if not authorized:
-                abort(403)
+                abort(403, 'denied')
 
             return view(**kwargs)
 
