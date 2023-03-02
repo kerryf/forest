@@ -3,7 +3,7 @@ import logging
 import logging.config
 import os
 
-from flask import Flask
+from flask import Flask, flash, redirect, url_for
 
 from . import dart, db, lumber, guard
 from . import forest_bp, auth_bp, home_bp
@@ -60,5 +60,22 @@ def create_app(test_config=None):
     app.register_blueprint(forest_bp.bp)
     app.register_blueprint(auth_bp.bp)
     app.register_blueprint(home_bp.bp)
+
+    # Error handlers
+    @app.errorhandler(401)
+    def handle_401(e):
+        return redirect(url_for('auth.login'))
+
+    @app.errorhandler(403)
+    def handle_403(e):
+
+        if e.description == 'invalid_token':
+            endpoint = 'auth.login'
+            flash('Please login again to refresh your session', 'invalid_token')
+        else:
+            endpoint = 'home.index'
+            flash('Your account is not authorized to perform that action', 'not_authorized')
+
+        return redirect(url_for(endpoint))
 
     return app
