@@ -1,17 +1,25 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Forest</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#guestNav"
-                aria-controls="guestNav" aria-expanded="false" aria-label="Toggle Navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="guestNav">
-            <ul class="navbar-nav me-auto">
-                <!-- Left -->
-            </ul>
-            <ul class="navbar-nav">
-                <!-- Right -->
-            </ul>
+<nav class="navbar is-link" role="navigation" aria-label="guest navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <span class="icon">
+                <i class="fad fa-trees"></i>
+            </span>
+            <span class="pl-1">Forest</span>
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="guestNavbar">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="guestNavbar" class="navbar-menu">
+        <div class="navbar-start">
+            <!-- Left -->
+        </div>
+        <div class="navbar-end">
+            <!-- Right -->
         </div>
     </div>
 </nav>
