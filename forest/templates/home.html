@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Home{% endblock %}</h1>
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-    <div>This is the home page</div>
+    <div class="section">
+        <div class="container">
+            {% if dart_has('not_authorized') %}
+                <div class="notification is-warning">
+                    {{ dart_first('not_authorized') }}
+                </div>
+            {% endif %}
+            <div class="columns">
+                <div class="column">
+                    <p>Home content goes here</p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
