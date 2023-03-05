@@ -29,6 +29,7 @@ def get_person_roles(person_id: int) -> list:
 def add_person_role(person_id: int, role_id: int) -> None:
     db = get_db()
     db.execute('insert into person_role (person_id, role_id) values (?, ?)', (person_id, role_id))
+    db.commit()
 
     return None
 

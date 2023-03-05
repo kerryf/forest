@@ -1,5 +1,3 @@
-from typing import Optional
-
 from forest.db import get_db
 
 
@@ -10,5 +8,6 @@ def record_action(data: dict) -> None:
 
     db = get_db()
     db.execute(sql, (data['person_id'], data['action'], data['ip_address'], data['user_agent']))
+    db.commit()
 
     return None
