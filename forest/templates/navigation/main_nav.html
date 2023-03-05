@@ -1,38 +1,44 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/home">Home</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle Navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav me-auto">
-                {% if has_role(['SYSTEM_ADMIN', 'PERSON_ADMIN']) %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false">Users</a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Create</a>
-                        <a class="dropdown-item" href="#">Manage</a>
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="{{ url_for('home.index') }}">
+            <span class="icon">
+                <i class="fad fa-home"></i>
+            </span>
+            <span class="pl-1">Home</span>
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="mainNavbar" class="navbar-menu">
+        <div class="navbar-start">
+            {% if has_role(['SYSTEM_ADMIN', 'PERSON_ADMIN']) %}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">Users</a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item">Create</a>
+                        <a class="navbar-item">Manage</a>
                     </div>
-                </li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false">Account</a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">Password</a>
-                        <div class="dropdown-divider"></div>
-                        <a id="logout_link" class="dropdown-item" href="#">Logout</a>
-                    </div>
-                </li>
-            </ul>
+                </div>
+            {% endif %}
+        </div>
+        <div class="navbar-end">
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">Account</a>
+                <div class="navbar-dropdown is-right">
+                    <a class="navbar-item">Profile</a>
+                    <a class="navbar-item">Password</a>
+                    <hr class="navbar-divider">
+                    <a id="logout_link" class="navbar-item" href="{{ url_for('auth.logout') }}">Logout</a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
-<form id="logout_form" action="/logout" method="post" style="display: none;">
+<form id="logout_form" action="{{ url_for('auth.logout') }}" method="post" style="display: none;">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 </form>
