@@ -34,6 +34,14 @@ def login():
             session['forest_person'] = person['id']
             generate_csrf_token()
 
+            data = {
+                'person_id': person['id'],
+                'action': 'login',
+                'ip_address': request.remote_addr,
+                'user_agent': request.user_agent.string
+            }
+            record_action(data)
+
             return redirect(url_for('home.index'))
 
         flash(error, 'login_error')
@@ -52,7 +60,7 @@ def logout():
         'person_id': session['forest_person'],
         'action': 'logout',
         'ip_address': request.remote_addr,
-        'user_agent': request.user_agent
+        'user_agent': request.user_agent.string
     }
     record_action(data)
 
