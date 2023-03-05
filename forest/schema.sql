@@ -12,7 +12,6 @@ create table person (
     password text not null,
     mobile text null,
     enabled integer not null,
-    locked integer not null,
     change_password integer not null,
     created_at text not null,
     updated_at text null,

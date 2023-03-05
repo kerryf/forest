@@ -6,14 +6,16 @@ from forest.db import get_db
 
 
 def create_person(data: dict) -> int:
-    sql = '''insert into person (name, email, password, mobile, enabled, locked, change_password, created_at) 
-    values (?, ?, ?, ?, 1, 0, 0, CURRENT_TIMESTAMP)
+    sql = '''insert into person (name, email, password, mobile, enabled, change_password, created_at) 
+    values (?, ?, ?, ?, 1, 0, CURRENT_TIMESTAMP)
     '''
 
     password = generate_password_hash(data['password'], method='pbkdf2:sha512')
 
     db = get_db()
     db.execute(sql, (data['name'], data['email'], password, data['mobile'], data['change_password']))
+    db.commit()
+
     person_id = db.cursor().lastrowid
 
     return person_id
