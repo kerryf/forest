@@ -7,22 +7,41 @@
         <div class="container">
             <div class="columns is-centered">
                 <div class="column is-three-quarters-tablet is-two-thirds-desktop is-half-widescreen is-one-third-fullhd">
-                    <form action="/login" method="post" class="box">
+                    {% if dart_has('login_error') %}
+                        <div class="notification is-danger">
+                            <button class="delete"></button>
+                            {{ dart_first('login_error') }}
+                        </div>
+                    {% endif %}
+                    {% if dart_has('invalid_token') %}
+                        <div class="notification is-warning">
+                            <button class="delete"></button>
+                            {{ dart_first('invalid_token') }}
+                        </div>
+                    {% endif %}
+                    <form action="{{ url_for('auth.login') }}" method="post" class="box">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="field">
                             <label for="email" class="label">Email</label>
                             <div class="control">
-                                <input id="email" name="email" type="email" class="input" maxlength="192" value="">
+                                <input id="email" name="email" type="email" class="input{{ ' is-danger' if dart_has('email') }}" maxlength="192">
                             </div>
+                            {% if dart_has('email') %}
+                                <p class="help is-danger">{{ dart_first('email') }}</p>
+                            {% endif %}
                         </div>
                         <div class="field">
                             <label for="password" class="label">Password</label>
                             <div class="control">
-                                <input id="password" name="password" type="password" class="input" maxlength="64" value="">
+                                <input id="password" name="password" type="password" class="input{{ ' is-danger' if dart_has('password') }}" maxlength="64">
                             </div>
+                            {% if dart_has('password') %}
+                                <p class="help is-danger">{{ dart_first('password') }}</p>
+                            {% endif %}
                         </div>
                         <div class="field">
                             <div class="control">
-                                <button class="button" type="submit">Login</button>
+                                <button class="button is-success" type="submit">Login</button>
                             </div>
                         </div>
                     </form>
