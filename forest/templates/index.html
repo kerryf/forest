@@ -7,7 +7,7 @@
         <div class="container">
             <h1 class="title">Forest</h1>
             <h2 class="subtitle">Reference application using Flask</h2>
-            <a href="/login" class="button is-success">
+            <a href="{{ url_for('auth.login') }}" class="button is-success">
                 <span>Login</span>
                 <span class="icon is-small">
                     <i class="fad fa-sign-in"></i>
